@@ -1,18 +1,17 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface Service extends Document{
+export interface Garment extends Document {
     _id: mongoose.Types.ObjectId;
     name: string;
     description: string;
-    deliveryTimeInMinuter: number;
     isAvailable: boolean;
-    baseType: string;
+    category:string;
     createdAt?: Date;
     updatedAt?: Date;
 }
 
-const serviceSchema: Schema<Service>  = new Schema({
-    name :{
+const garments = new Schema<Garment>({
+    name: {
         type: String,
         required: true,
         trim: true,
@@ -22,22 +21,19 @@ const serviceSchema: Schema<Service>  = new Schema({
         type: String,
         required: true,
     },
-    deliveryTimeInMinuter: {
-        type: Number,
-        default: 30,
-        min: 25
-    },
     isAvailable: {
         type: Boolean,
         default: true
     },
-    baseType: {
+    category:{
         type: String,
-        enum: ["perKg", "perItem", "perService"],
         required: true,
-    },
-},{
+        enum: ['Clothing', 'Linen', 'FootWear', 'Others'],
+        default: 'Clothing'
+    }
+}, {
     timestamps: true,
 })
 
-export default mongoose.model<Service>('Service', serviceSchema, 'Service');
+
+export default mongoose.model<Garment>('Garment', garments, 'Garment');
