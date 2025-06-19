@@ -14,8 +14,8 @@ export async function getAllServices(req: Request, res: Response):Promise<void> 
 
 export async function createService(req: Request, res: Response):Promise<void> {
   try {
-    const { name, description, isAvailable, basePrice } = req.body;
-    if (!name || !description || !basePrice || isAvailable === undefined) {
+    const { name, description, isAvailable, baseType, deliveryTimeInMinuter, isExpressAvailable } = req.body;
+    if (!name || !description || !baseType) {
       logger.warn("Validation failed: All fields are required");
       res.status(400).json({ message: "All fields are required" });
     }
@@ -30,7 +30,9 @@ export async function createService(req: Request, res: Response):Promise<void> {
       name,
       description,
       isAvailable,
-      basePrice,
+      baseType,
+      deliveryTimeInMinuter,
+      isExpressAvailable,
     });
     await newService.save();
     res.status(201).json(newService);
