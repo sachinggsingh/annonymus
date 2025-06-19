@@ -109,7 +109,7 @@ export const getAllPricingByServiceId = async (
 }
 
 
-export const getPRiceWithServiceIdAndGarmentId = async(req:Request, res:Response):Promise<void> => {
+export const getPriceWithServiceIdAndGarmentId = async(req:Request, res:Response):Promise<void> => {
     try {
         const { garmentId, serviceId } = req.params;
         const pricing = await Pricing.findOne({ garmentId, serviceId })

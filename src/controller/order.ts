@@ -1,32 +1,50 @@
+import { Request, Response } from "express";
 import Pricing from "../model/pricingModel";
-import {logger} from "../config/logger";
-import {Request, Response} from "express";
-import { log } from "console";
+import { logger } from "../config/logger";
+import Order from "../model/order";
 
-interface OrderItem {
-    garmentId: string;
-    serviceId: string;
-    isExpress: boolean;
-    expressPrice?: number;
-    price: number;
-    qty: number;
-}
+export const placeOrder = async (req: Request, res: Response):Promise<void> => {
+    try {
+    const { userId, items, isExpress, pickUpDate } = req.body;
+    let totalAmount = 0;
+    const orderItems = [];
 
-export const setTheOrder = async (items: OrderItem[]): Promise<number> => {
-    let total = 0;
     for (const item of items) {
-        const priceEntry = await Pricing.findOne({ garmentId: item.garmentId, serviceId: item.serviceId });
-
-        if (!priceEntry) {
-            logger.error("Pricing not found for garmentId:", item.garmentId, "and serviceId:", item.serviceId);
-            throw new Error("Pricing not found for garmentId: " + item.garmentId + " and serviceId: " + item.serviceId);
+        {
+        const pricing = await Pricing.findOne({
+            serviceId: item.serviceId,
+            garmentId: item.garmentId,
+        });
+        if (!pricing) {
+            logger.warn("No pricing is found ");
+            res
+                .status(400)
+                .json({ msg: "No pricing found", success: false });
+            return;
         }
 
-        const price = item.isExpress && item.expressPrice
-            ? item.expressPrice
-            : item.price;
+        const price =
+            isExpress && pricing.expressPrice
+                ? pricing.expressPrice
+                : pricing.price;
+        const totalPrice = price * item.quantity;
 
-        total += price * item.qty;
+        orderItems.push({ ...item, pricePerUnit: price, totalPrice });
+        totalAmount += totalPrice;
+        }
     }
-    return total;
-}
+    const order = await Order.create({
+        userId,
+        items: orderItems,
+        isExpress,
+        pickUpDate,
+        deliveryDate: new Date(new Date(pickUpDate).getTime() + (isExpress ? 1 : 3) * 24 * 60 * 60 * 1000),
+        totalAmount
+    });
+
+    res.status(201).json(order);
+    } catch (error) {
+    logger.error(`Error placing order: ${error}`);
+    res.status(500).json({ error: "Internal Server Error" });
+    }
+};
