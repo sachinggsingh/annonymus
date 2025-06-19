@@ -78,3 +78,15 @@
 {"level":"info","message":"Server is running on http://localhost:3000","service":"service"}
 {"level":"info","message":"Connected to DB","service":"service"}
 {"level":"info","message":"Database connection established","service":"service"}
+{"level":"info","message":"Logger working perfectly","service":"service"}
+{"level":"info","message":"Server is running on http://localhost:3000","service":"service"}
+{"level":"info","message":"Connected to DB","service":"service"}
+{"level":"info","message":"Database connection established","service":"service"}
+{"level":"info","message":"Logger working perfectly","service":"service"}
+{"level":"info","message":"Server is running on http://localhost:3000","service":"service"}
+{"level":"info","message":"Connected to DB","service":"service"}
+{"level":"info","message":"Database connection established","service":"service"}
+{"level":"info","message":"Logger working perfectly","service":"service"}
+{"level":"info","message":"Server is running on http://localhost:3000","service":"service"}
+{"level":"info","message":"Connected to DB","service":"service"}
+{"level":"info","message":"Database connection established","service":"service"}
