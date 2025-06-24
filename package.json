@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/body-parser": "^1.19.6",
     "@types/dotenv": "^6.1.1",
     "@types/mongoose": "^5.11.96",
     "dotenv": "^16.5.0",
