@@ -11,9 +11,7 @@ import { limiter } from "./config/rate-limitter";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-connectDB()
-    .then(() => logger.info("Database connection established"))
-    .catch((error) => logger.error("Database connection failed", error));   
+connectDB()   
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
