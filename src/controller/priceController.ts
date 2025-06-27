@@ -21,6 +21,7 @@ export const setPricing = async (
         success: true,
         data: existingPricing,
         });
+        return;
     }
 
     // new pricing entry

@@ -33,6 +33,7 @@ export const getGarments = async (req: Request, res: Response): Promise<void> =>
         if (garmentsList.length === 0) {
             logger.warn("No garments found");
             res.status(404).json({ message: "No garments found" });
+                        return;
         } else {
             logger.info("Garments retrieved successfully");
             res.status(200).json(garmentsList);
@@ -46,8 +47,8 @@ export const getGarments = async (req: Request, res: Response): Promise<void> =>
 }
 export const getGarmentById = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { userId } = req.params;
-        const garmentItem = await garment.findById(userId);
+        const { garmentId } = req.params;
+        const garmentItem = await garment.findById(garmentId);
         if (!garmentItem) {
             logger.warn("Garment not found");
             res.status(404).json({ error: "Garment not found" });
@@ -62,10 +63,10 @@ export const getGarmentById = async (req: Request, res: Response): Promise<void>
 }
 export const updateGarment = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { userId } = req.params;
+        const { garmentId } = req.params;
         const { name, description, category, isAvailable } = req.body;
         const updatedGarment = await garment.findByIdAndUpdate(
-            userId,
+            garmentId,
             { name, description, category, isAvailable },
             { new: true }
         );
@@ -87,8 +88,8 @@ export const updateGarment = async (req: Request, res: Response): Promise<void> 
 }
 export const deleteGarment = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { userId } = req.params;
-        const deletedGarment = await garment.findByIdAndDelete(userId);
+        const { garmentId } = req.params;
+        const deletedGarment = await garment.findByIdAndDelete(garmentId);
         if (!deletedGarment) {
             logger.warn("Garment not found");
             res.status(404).json({ error: "Garment not found" });

@@ -42,33 +42,33 @@ export async function createService(req: Request, res: Response):Promise<void> {
   }
 }
 
-export async function updateService(req: Request, res: Response):Promise<void> {
-  try {
-    const { id } = req.params;
-    const { name, description, isAvailable, basePrice } = req.body;
+// export async function updateService(req: Request, res: Response):Promise<void> {
+//   try {
+//     const { id } = req.params;
+//     const { name, description, isAvailable, basePrice } = req.body;
 
-    if (!name || !description || !basePrice || isAvailable === undefined) {
-      logger.warn("Validation failed: All fields are required");
-      res.status(400).json({ message: "All fields are required" });
-    }
+//     if (!name || !description || !basePrice || isAvailable === undefined) {
+//       logger.warn("Validation failed: All fields are required");
+//       res.status(400).json({ message: "All fields are required" });
+//     }
 
-    const service = await Service.findByIdAndUpdate(
-      id,
-      { name, description, isAvailable, basePrice },
-      { new: true }
-    );
+//     const service = await Service.findByIdAndUpdate(
+//       id,
+//       { name, description, isAvailable, basePrice },
+//       { new: true }
+//     );
 
-    if (!service) {
-      logger.warn("Service not found:", id);
-      res.status(404).json({ message: "Service not found" });
-    }
+//     if (!service) {
+//       logger.warn("Service not found:", id);
+//       res.status(404).json({ message: "Service not found" });
+//     }
 
-    res.status(200).json(service);
-  } catch (error) {
-    logger.error("Error updating service:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-}
+//     res.status(200).json(service);
+//   } catch (error) {
+//     logger.error("Error updating service:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// }
 
 export async function deleteService(req: Request, res: Response):Promise<void> {
   try {
