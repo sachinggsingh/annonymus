@@ -4,40 +4,46 @@ import { logger } from "../config/logger";
 
 export const createGarment = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, description, category } = req.body;
-        if (!name || !description || !category) {
-            logger.warn("Missing required fields");
-            res.status(400).json({ error: "Name, description, and category are required" });
+        const { name, description, category, note,quantity } = req.body;
+        if (!name || !description || !category||!quantity) {
+            logger.warn("Validation failed: All fields are required");
+            res.status(400).json({ error: "All fields are required" });
+            return;
         }
+
         const existingGarment = await garment.findOne({ name });
         if (existingGarment) {
             logger.warn("Garment already exists");
-            res.status(400).json({ error: "Garment with this name already exists" });
+            res.status(400).json({ error: "Garment already exists" });
+            return;
         }
+
         const newGarment = new garment({
             name,
             description,
             category,
+            note,
+            quantity
         });
         await newGarment.save();
         logger.info("Garment created successfully");
         res.status(201).json(newGarment);
-    } catch (error) {
+    }
+    catch (error) {
         logger.error(`Error creating garment: ${error}`);
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
 export const getGarments = async (req: Request, res: Response): Promise<void> => {
     try {
-        const garmentsList = await garment.find();  
+        const garmentsList = await garment.find();
         if (garmentsList.length === 0) {
             logger.warn("No garments found");
             res.status(404).json({ message: "No garments found" });
-                        return;
+            return;
         } else {
             logger.info("Garments retrieved successfully");
             res.status(200).json(garmentsList);
-
         }
     }
     catch (error) {
@@ -45,28 +51,12 @@ export const getGarments = async (req: Request, res: Response): Promise<void> =>
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
-export const getGarmentById = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { garmentId } = req.params;
-        const garmentItem = await garment.findById(garmentId);
-        if (!garmentItem) {
-            logger.warn("Garment not found");
-            res.status(404).json({ error: "Garment not found" });
-        } else {
-            logger.info("Garment retrieved successfully");
-            res.status(200).json(garmentItem);
-        }
-    } catch (error) {
-        logger.error(`Error retrieving garment: ${error}`);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-}
 export const updateGarment = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { garmentId } = req.params;
+        const { id } = req.params;
         const { name, description, category, isAvailable } = req.body;
         const updatedGarment = await garment.findByIdAndUpdate(
-            garmentId,
+            id,
             { name, description, category, isAvailable },
             { new: true }
         );
@@ -88,8 +78,8 @@ export const updateGarment = async (req: Request, res: Response): Promise<void> 
 }
 export const deleteGarment = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { garmentId } = req.params;
-        const deletedGarment = await garment.findByIdAndDelete(garmentId);
+        const { id } = req.params;
+        const deletedGarment = await garment.findByIdAndDelete(id);
         if (!deletedGarment) {
             logger.warn("Garment not found");
             res.status(404).json({ error: "Garment not found" });

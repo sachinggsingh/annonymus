@@ -1,7 +1,7 @@
 import mongoose, {Document,Schema}  from "mongoose";
 
 interface OrderModel extends Document {
-    userId?:mongoose.Types.ObjectId;
+    id: mongoose.Types.ObjectId;
     items : [{
         garmentId: mongoose.Types.ObjectId;
         serviceId: mongoose.Types.ObjectId;
@@ -17,11 +17,6 @@ interface OrderModel extends Document {
 }
 
 const orderSchema = new Schema<OrderModel>({
-    userId: {
-        type: Schema.Types.ObjectId,    
-        ref: 'User',
-        required: false
-    },
     items: [{
         garmentId: {
             type: Schema.Types.ObjectId,
@@ -42,13 +37,10 @@ const orderSchema = new Schema<OrderModel>({
             type: Number,
             required: true,
             min: 0
-        },
-        totalPrice: {
-            type: Number,
-            required: true,
-            min: 0
         }
     }],
+
+
     isExpress: {
         type: Boolean,
         default: false

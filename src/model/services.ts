@@ -7,7 +7,7 @@ export interface Service extends Document{
     deliveryTimeInMinuter: number;
     isAvailable: boolean;
     baseType: string;
-    isExpressAvailable?: boolean;
+    basePrice: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -37,10 +37,10 @@ const serviceSchema: Schema<Service>  = new Schema({
         enum: ["perKg", "perItem", "perService"],
         required: true,
     },
-    isExpressAvailable: {
-        type: Boolean,
-        default: true
-    }
+    basePrice: {
+        type: Number,
+        required: true,
+    },
 },{
     timestamps: true,
 })

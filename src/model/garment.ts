@@ -4,8 +4,9 @@ export interface Garment extends Document {
     _id: mongoose.Types.ObjectId;
     name: string;
     description: string;
-    isAvailable: boolean;
     category:string;
+    quantity: number;
+    note?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -21,9 +22,14 @@ const garments = new Schema<Garment>({
         type: String,
         required: true,
     },
-    isAvailable: {
-        type: Boolean,
-        default: true
+    note: {
+        type: String,
+        default: ''
+    },
+    quantity: {
+        type: Number,
+        required: true,
+        min: 1,
     },
     category:{
         type: String,

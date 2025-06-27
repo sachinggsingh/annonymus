@@ -5,7 +5,7 @@ import Order from "../model/order";
 
 export const placeOrder = async (req: Request, res: Response):Promise<void> => {
     try {
-    const { userId, items, isExpress, pickUpDate } = req.body;
+    const {  items, pickUpDate,quantity,basePrice,deliveryDate,isAvailable } = req.body;
     let totalAmount = 0;
     const orderItems = [];
 
@@ -23,23 +23,18 @@ export const placeOrder = async (req: Request, res: Response):Promise<void> => {
             return;
         }
 
-        const price =
-            isExpress && pricing.expressPrice
-                ? pricing.expressPrice
-                : pricing.price;
-        const totalPrice = price * item.quantity;
+        const totalPrice = basePrice * quantity;
 
-        orderItems.push({ ...item, pricePerUnit: price, totalPrice });
+        orderItems.push({ ...item, pricePerUnit: basePrice, totalPrice });
         totalAmount += totalPrice;
         }
     }
     const order = await Order.create({
-        userId,
         items: orderItems,
-        isExpress,
         pickUpDate,
-        deliveryDate: new Date(new Date(pickUpDate).getTime() + (isExpress ? 1 : 3) * 24 * 60 * 60 * 1000),
-        totalAmount
+        deliveryDate,
+        isAvailable,
+        totalPrice: totalAmount,
     });
 
     res.status(201).json(order);
