@@ -43,3 +43,6 @@ next-env.d.ts
 
 combined.log
 error.log
+
+# Ignore all .txt files
+*.txt
