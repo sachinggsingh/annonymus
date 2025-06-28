@@ -1,7 +1,18 @@
 import express from 'express'
-export const router = express.Router()
-import {getPriceWithServiceIdAndGarmentId, getAllPricingByGarmentId, getAllPricingByServiceId} from '../controller/priceController'
+import { 
+    getPriceWithServiceIdAndGarmentId, 
+    getAllPricingByGarmentId, 
+    getAllPricingByServiceId,
+    setPricing 
+} from '../controller/priceController'
+import { PricingValidation, validateWithJoi } from '../config/Validations'
 
-router.get('/pricing/:id/:id', getPriceWithServiceIdAndGarmentId);
-router.get('/pricing/:id', getAllPricingByGarmentId);
-router.get('/pricing/:id', getAllPricingByServiceId);
+export const router = express.Router()
+
+// Apply validation middleware to routes that need it
+router.post('/pricing', validateWithJoi(PricingValidation), setPricing)
+router.get('/pricing/garment/:garmentId', getAllPricingByGarmentId)
+router.get('/pricing/service/:serviceId', getAllPricingByServiceId)
+router.get('/pricing/:garmentId/:serviceId', getPriceWithServiceIdAndGarmentId)
+
+export default router

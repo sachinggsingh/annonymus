@@ -1,7 +1,10 @@
 import express from 'express'
+import { placeOrder } from '../controller/order'
+import { OrderValidation, validateWithJoi } from '../config/Validations'
+
 export const router = express.Router()
 
-import {placeOrder} from '../controller/order'
+// Apply validation middleware to the route
+router.post('/order', validateWithJoi(OrderValidation), placeOrder)
 
-router.post('/order', placeOrder);
-// userId is not available
+export default router

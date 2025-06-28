@@ -1,10 +1,10 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface Service extends Document{
+export interface Service extends Document {
     _id: mongoose.Types.ObjectId;
     name: string;
     description: string;
-    deliveryTimeInMinuter: number;
+    deliveryTimeInMinutes: number;
     isAvailable: boolean;
     baseType: string;
     basePrice: number;
@@ -12,21 +12,27 @@ export interface Service extends Document{
     updatedAt?: Date;
 }
 
-const serviceSchema: Schema<Service>  = new Schema({
-    name :{
+const serviceSchema: Schema<Service> = new Schema({
+    name: {
         type: String,
         required: true,
         trim: true,
-        unique: true
+        unique: true,
+        minlength: 2,
+        maxlength: 100
     },
     description: {
         type: String,
         required: true,
+        trim: true,
+        minlength: 10,
+        maxlength: 500
     },
-    deliveryTimeInMinuter: {
+    deliveryTimeInMinutes: {
         type: Number,
         default: 30,
-        min: 25
+        min: 15,
+        max: 480
     },
     isAvailable: {
         type: Boolean,
@@ -40,9 +46,10 @@ const serviceSchema: Schema<Service>  = new Schema({
     basePrice: {
         type: Number,
         required: true,
+        min: 0
     },
-},{
+}, {
     timestamps: true,
-})
+});
 
 export default mongoose.model<Service>('Service', serviceSchema, 'Service');
